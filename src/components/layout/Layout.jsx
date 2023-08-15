@@ -1,0 +1,1 @@
+export const Layout = ({children}) => (<div className='container mx-auto py-3'>{children}</div>)
