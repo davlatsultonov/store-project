@@ -7,6 +7,8 @@ import { ErrorPage } from './pages/ErrorPage.jsx';
 import { Product } from './pages/Product.jsx';
 import { Provider } from 'react-redux';
 import { store } from './store/index.js';
+import {ApiProvider} from "@reduxjs/toolkit/query/react";
+import {productsApi} from "./store/api/apiSlice.js";
 
 export const productionPrefix = import.meta.env.MODE === 'production' ? '/store-project' : ''
 
@@ -28,7 +30,9 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Provider store={store}>
-      <RouterProvider router={router} />
+      <ApiProvider api={productsApi}>
+        <RouterProvider router={router} />
+      </ApiProvider>
     </Provider>
   </React.StrictMode>
 );
