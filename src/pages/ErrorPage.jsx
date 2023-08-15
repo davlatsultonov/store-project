@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import {productionPrefix} from "../main.jsx";
 
 export const ErrorPage = () => (
   <div className="bg-primary relative z-10 py-[120px] bg-blue-600 min-h-screen flex items-center">
@@ -16,7 +17,7 @@ export const ErrorPage = () => (
               The page you are looking for it maybe deleted
             </p>
             <Link
-              to={'/'}
+              to={productionPrefix + '/'}
               className="hover:text-primary inline-block rounded-lg border border-white px-8 py-3 text-center text-base font-semibold text-white transition hover:bg-blue"
             >
               Go To Home

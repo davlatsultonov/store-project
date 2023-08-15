@@ -10,11 +10,11 @@ export const Card = ({ product }) => {
 
     return (<div
         className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flex flex-col justify-between">
-        <Link to={productionPrefix + `product/${id}`} className='border-b'>
+        <Link to={productionPrefix + `/product/${id}`} className='border-b'>
             <img className="rounded-t-lg h-52 object-cover mx-auto" src={thumbnail} alt={title}/>
         </Link>
         <div className="px-5 py-5 flex-grow flex flex-col">
-            <Link to={productionPrefix + `product/${id}`} className='mb-auto relative'>
+            <Link to={productionPrefix + `/product/${id}`} className='mb-auto relative'>
                 <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{ title }</h5>
                 { discountEl() }
             </Link>
