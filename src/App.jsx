@@ -1,9 +1,14 @@
 import {Layout} from "./components/layout/Layout.jsx";
 import {Card} from "./components/card/Card.jsx";
 import {CardGroup} from "./components/card/CardGroup.jsx";
+import {CategoryGroup} from "./components/category/CategoryGroup.jsx";
+import {CategoryItem} from "./components/category/CategoryItem.jsx";
 
 function App() {
   return <Layout>
+    <CategoryGroup>
+      <CategoryItem name={'smartphones'} />
+    </CategoryGroup>
     <div className='flex gap-2'>
       <div className='w-1/5'>
         Filters

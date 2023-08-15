@@ -1,0 +1,1 @@
+export const Heading5 = ({ title }) => <h4 className="text-xl font-bold dark:text-white mb-4">{ title }</h4>
