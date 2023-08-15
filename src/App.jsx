@@ -15,11 +15,11 @@ function App() {
   const { products, isLoading, error } = useSelector(state => state.productReducer);
 
   useEffect(() => {
-    dispatch(fetchProducts())
+    if (!products.length) dispatch(fetchProducts())
   }, [])
 
   const renderCards = () => {
-    return products.map(product => <Card key={product.id} product={product}/>)
+    return (products && products.map(product => <Card key={product.id} product={product}/>)) || 'No data';
   }
 
   return <Layout>

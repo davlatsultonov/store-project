@@ -9,7 +9,7 @@ export const CategoryGroup = () => {
     const { categories, isLoading, error } = useSelector(state => state.categoryReducer);
 
     useEffect(() => {
-        dispatch(fetchCategories())
+        if (!categories.length) dispatch(fetchCategories())
     }, [])
 
     return <>

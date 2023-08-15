@@ -5,7 +5,7 @@ import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ErrorPage } from './pages/ErrorPage.jsx';
 import { Product } from './pages/Product.jsx';
-import { Provider } from 'react-redux';
+import {Provider} from 'react-redux';
 import { store } from './store/store.js';
 
 export const productionPrefix = import.meta.env.MODE === 'production' ? '/store-project' : ''
@@ -17,7 +17,7 @@ const router = createBrowserRouter([
   },
   {
     path: `${productionPrefix}/product/:id`,
-    element: <Product />,
+    element: <Product />
   },
   {
     path: '*',
