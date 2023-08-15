@@ -1,4 +1,6 @@
 import {Rating} from "../rating/Rating.jsx";
+import {Link} from "react-router-dom";
+import {productionPrefix} from "../../main.jsx";
 
 export const Card = ({ product }) => {
     const { title, description, price, discountPercentage, rating, brand, category, thumbnail, images  } = product;
@@ -9,9 +11,9 @@ export const Card = ({ product }) => {
             <img className="rounded-t-lg object-cover mx-auto" src={thumbnail} alt={title}/>
         </a>
         <div className="px-5 py-5">
-            <a href="#">
+            <Link to={productionPrefix + 'product/12'}>
                 <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{ title }</h5>
-            </a>
+            </Link>
             <div className="flex items-center mt-2.5 mb-5">
                 <Rating rating={rating} />
                 <span

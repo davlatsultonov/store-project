@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom/client';
 import App from './App.jsx';
 import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { ErrorPage } from './components/ErrorPage.jsx';
-import { Product } from './components/Product.jsx';
+import { ErrorPage } from './pages/ErrorPage.jsx';
+import { Product } from './pages/Product.jsx';
 import { Provider } from 'react-redux';
 import { store } from './store/index.js';
 
