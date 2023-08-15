@@ -4,19 +4,19 @@ import App from './App.jsx';
 import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ErrorPage } from './components/ErrorPage.jsx';
-import Product from './components/Product.jsx';
+import { Product } from './components/Product.jsx';
 import { Provider } from 'react-redux';
 import { store } from './store/index.js';
 
-const productionPrefix = import.meta.env.MODE === 'production' ? '/store-project/' : '/'
+export const productionPrefix = import.meta.env.MODE === 'production' ? '/store-project' : ''
 
 const router = createBrowserRouter([
   {
-    path: `${productionPrefix}`,
+    path: `${productionPrefix}/`,
     element: <App />,
   },
   {
-    path: `${productionPrefix}product/:id`,
+    path: `${productionPrefix}/product/:id`,
     element: <Product />,
   },
   {
