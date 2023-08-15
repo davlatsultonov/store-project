@@ -6,18 +6,20 @@ import {FilterGroup} from "./components/filters/FilterGroup.jsx";
 import {BlockWrapper} from "./components/layout/BlockWrapper.jsx";
 import {FilterItem} from "./components/filters/FilterItem.jsx";
 import {FilterPrice} from "./components/filters/FilterPrice.jsx";
-import {useGetAllProductsQuery} from "./store/api/apiSlice.js";
+import {useDispatch, useSelector} from "react-redux";
+import {useEffect} from "react";
+import {fetchProducts} from "./store/reducers/ActionCreator.js";
 
 function App() {
-  const { data, error, isLoading, isSuccess, isError } = useGetAllProductsQuery();
+  const dispatch = useDispatch()
+  const { products, isLoading, error } = useSelector(state => state.productReducer);
 
-  let postContent;
-  if (isLoading) {
-    postContent = 'Loading...'
-  } else if (isSuccess) {
-    postContent = data?.products.map(product => <Card key={product.id} product={product}/>)
-  } else if (isError) {
-    postContent = 'Error!!'
+  useEffect(() => {
+    dispatch(fetchProducts())
+  }, [])
+
+  const renderCards = () => {
+    return products.map(product => <Card key={product.id} product={product}/>)
   }
 
   return <Layout>
@@ -42,8 +44,10 @@ function App() {
         </BlockWrapper>
       </div>
       <BlockWrapper>
+        { isLoading && <h1>Loading...</h1> }
+        { error && <h1>{ error }</h1> }
         <CardGroup className='flex-1'>
-          { postContent }
+          { renderCards() }
         </CardGroup>
       </BlockWrapper>
     </div>

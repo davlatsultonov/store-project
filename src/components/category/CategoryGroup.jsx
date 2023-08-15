@@ -1,25 +1,24 @@
 import {Heading5} from "../headings/Heading5.jsx";
-import {useGetAllCategoriesQuery} from "../../store/api/apiSlice.js";
+import {useDispatch, useSelector} from "react-redux";
+import {useEffect} from "react";
+import {fetchCategories} from "../../store/reducers/ActionCreator.js";
 import {CategoryItem} from "./CategoryItem.jsx";
-import {BlockWrapper} from "../layout/BlockWrapper.jsx";
-import {Heading1} from "../headings/Heading1.jsx";
 
 export const CategoryGroup = () => {
-    const { data: categories, error, isLoading, isSuccess, isError } = useGetAllCategoriesQuery();
-    let content;
+    const dispatch = useDispatch();
+    const { categories, isLoading, error } = useSelector(state => state.categoryReducer);
 
-    if (isLoading) {
-        content = 'Loading...'
-    } else if (isSuccess) {
-        content = categories.map(category => <CategoryItem key={category} name={category}/>)
-    } else if (isError) {
-        content = 'Error'
-    }
+    useEffect(() => {
+        dispatch(fetchCategories())
+    }, [])
 
     return <>
         <Heading5 title='Categories' />
         <div className='flex flex-wrap gap-2'>
-            { content }
+            { isLoading && <h1>Loading...</h1> }
+            { error && <h1>{ error }</h1> }
+            { categories &&  <CategoryItem name={'all'}/>}
+            { categories.map(category => <CategoryItem key={category} name={category}/>) }
         </div>
     </>
 }
