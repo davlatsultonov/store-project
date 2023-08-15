@@ -33,7 +33,7 @@ export const Product = () => {
         <BlockWrapper className='flex-1'>
           <Heading1 title={product?.title} light={true} />
           <div className='my-8'>
-            <Heading1 title={`${product?.price} c.`} />
+            <Heading1 title={`$${product?.price}`} />
           </div>
           <p className="mb-3 text-gray-500 dark:text-gray-400">{ product?.description }</p>
         </BlockWrapper>
