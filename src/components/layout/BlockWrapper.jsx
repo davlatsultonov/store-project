@@ -1,5 +1,5 @@
 export const BlockWrapper = ({ children, className }) => (
-    <div className={`${className} p-5 rounded-xl`} style={{ backgroundColor: 'rgb(253 253 253 / 78%)' }}>
+    <div className={`${className ?? ''} p-5 rounded-xl bg-white shadow-sm min-h-full`}>
         { children }
     </div>
 );
