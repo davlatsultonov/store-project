@@ -1,0 +1,1 @@
+export const Heading1 = ({ title, light = false }) => <h1 className={`text-3xl ${light ? '' : 'font-bold'} dark:text-white mb-4`}>{ title }</h1>
