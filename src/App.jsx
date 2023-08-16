@@ -10,10 +10,14 @@ import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
 import {fetchProducts} from "./store/reducers/ActionCreator.js";
 import {FilterSelect} from "./components/filters/FilterSelect.jsx";
+import {BasketIcon} from "./components/icons/BasketIcon.jsx";
+import {Drawer} from "./components/Drawer.jsx";
+import {toggleShowBasketItems} from "./store/reducers/BasketSlice.js";
 
 function App() {
   const dispatch = useDispatch()
   const { filteredProducts, minProductPrice, maxProductPrice, isLoading, error } = useSelector(state => state.productReducer);
+  const { products: basketProducts } = useSelector(state => state.basketReducer);
 
   useEffect(() => {
     if (!filteredProducts.length) dispatch(fetchProducts())
@@ -26,12 +30,16 @@ function App() {
   }
 
   return <Layout>
+    <Drawer/>
     <BlockWrapper className='mb-3'>
       <CategoryGroup />
     </BlockWrapper>
     <div className='flex gap-2'>
       <div className='w-1/4'>
         <BlockWrapper className='sticky top-3'>
+          { Object.keys(basketProducts).length ? <div className='text-center mb-4 border-b pb-4'  onClick={() => dispatch(toggleShowBasketItems())}>
+            <BasketIcon />
+          </div> : null }
           <FilterGroup>
             <FilterItem
               label={'Price'}

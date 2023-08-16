@@ -1,9 +1,16 @@
 import {Rating} from "../rating/Rating.jsx";
 import {Link} from "react-router-dom";
 import {productionPrefix} from "../../main.jsx";
+import {useDispatch} from "react-redux";
+import {add} from "../../store/reducers/BasketSlice.js";
 
 export const Card = ({ product }) => {
+    const dispatch = useDispatch();
     const { id, title, price, discountPercentage, rating, thumbnail } = product;
+
+    const handleAddToBasket = () => {
+        dispatch(add(product))
+    }
 
     const discountEl = () => discountPercentage ? <span
         className="left-0 -top-8 shadow bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-800 absolute">-{ Math.floor(discountPercentage) }%</span> : null;
@@ -25,8 +32,9 @@ export const Card = ({ product }) => {
             </div>
             <div className="flex items-center justify-between">
                 <span className="text-3xl font-bold text-gray-900 dark:text-white">${ price }</span>
-                {/*<a href="#"
-                   className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">В корзину</a>*/}
+                <button
+                    onClick={handleAddToBasket}
+                   className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">В корзину</button>
             </div>
         </div>
     </div>)
