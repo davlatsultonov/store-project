@@ -15,6 +15,11 @@ import 'swiper/css/navigation';
 
 import { Pagination, Navigation } from 'swiper/modules';
 import {Loader} from "../components/Loader.jsx";
+import {RemoveIcon} from "../components/icons/RemoveIcon.jsx";
+import {AddIcon} from "../components/icons/AddIcon.jsx";
+import {add, remove, toggleShowBasketItems} from "../store/reducers/BasketSlice.js";
+import {BasketIcon} from "../components/icons/BasketIcon.jsx";
+import {Drawer} from "../components/Drawer.jsx";
 
 export const Product = () => {
   const dispatch = useDispatch()
@@ -23,6 +28,19 @@ export const Product = () => {
   const navigate = useNavigate();
   const { id: productId } = useParams();
   const navigateBack = () =>  navigate(-1);
+  const { products: basketProducts } = useSelector(state => state.basketReducer);
+
+  const handleProductIncrease = (product) => {
+    dispatch(add(product))
+  }
+
+  const handleProductDecrease = (title) => {
+    dispatch(remove(title))
+  }
+
+  const handleProductIncreaseByTitle = (title) => {
+    dispatch(add(title))
+  }
 
   useEffect(() => {
     if (!products.length) dispatch(fetchProduct(productId))
@@ -31,12 +49,16 @@ export const Product = () => {
 
   return <Layout>
     <div className='block'>
+      <Drawer/>
       <GoBackBtn navigateBack={navigateBack}/>
+      { Object.keys(basketProducts).length ? <div onClick={() => dispatch(toggleShowBasketItems())}>
+        <BasketIcon />
+      </div> : null }
       <div className='w-5/12 mx-auto'>
         { isLoading && <Loader />}
         { error && <h1>{ error }</h1> }
         { isSuccess || product ? <>
-          <BlockWrapper className='mb-4'>
+          <BlockWrapper>
             <Swiper
                 slidesPerView={1}
                 spaceBetween={30}
@@ -53,13 +75,27 @@ export const Product = () => {
               </SwiperSlide>) }
             </Swiper>
           </BlockWrapper>
-          <BlockWrapper>
+          <BlockWrapper  className='my-4'>
             <div className='flex justify-between'>
               <Heading1 title={`${product?.title}`} light={true} />
               <Heading1 title={`$${product?.price}`} />
             </div>
-            <p className="mb-3 text-gray-500 dark:text-gray-400">{ product?.description }</p>
-          </BlockWrapper></> : null }
+            <p className="mb-8 text-gray-500 dark:text-gray-400">{ product?.description }</p>
+
+            <div className='flex justify-center'>
+              { !basketProducts.hasOwnProperty(product.title) ?
+                  <button
+                      onClick={() => handleProductIncrease(product)}
+                      className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add to Basket</button> :
+                  <div className='flex items-center'>
+                    <RemoveIcon onClick={() => handleProductDecrease(product.title)} />
+                    <span className='mx-4 text-lg'>{ basketProducts[product.title]?.length }</span>
+                    <AddIcon onClick={() => handleProductIncreaseByTitle(product.title)} />
+                  </div>
+              }
+            </div>
+          </BlockWrapper>
+        </> : null }
       </div>
     </div>
   </Layout>;

@@ -5,6 +5,9 @@ import {AddIcon} from "./icons/AddIcon.jsx";
 import {RemoveIcon} from "./icons/RemoveIcon.jsx";
 import {CloseIcon} from "./icons/CloseIcon.jsx";
 import {Heading1} from "./headings/Heading1.jsx";
+import {Link} from "react-router-dom";
+import {productionPrefix} from "../main.jsx";
+import {calculateTotalSum} from "../helpers/helpers.js";
 
 export const Drawer = () => {
     const dispatch = useDispatch()
@@ -18,10 +21,7 @@ export const Drawer = () => {
         dispatch(add(title))
     }
 
-    const totalSum = Object.values(basketProducts).reduce((acc, itemArray) => {
-        const sum = itemArray.reduce((subTotal, item) => subTotal + item.price, 0);
-        return acc + sum;
-    }, 0);
+    const totalSum = calculateTotalSum(basketProducts)
 
     const renderEl = () => {
         return Object.entries(basketProducts).map(([title, items]) => {
@@ -60,9 +60,14 @@ export const Drawer = () => {
                         {renderEl()}
                     </div>
                 </div>
-                <div className='flex justify-between'>
-                    <Heading1 title={'Total:'} light={true} />
-                    <Heading1 title={`$${totalSum}`} />
+                <div>
+                    <div className='flex justify-between'>
+                        <Heading1 title={'Total:'} light={true} />
+                        <Heading1 title={`$${totalSum}`} />
+                    </div>
+
+                    { totalSum > 0 ? <Link to={productionPrefix + 'basket'}
+                        className="block text-white w-full mt-5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-lg px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</Link> : null }
                 </div>
             </div>
             {/*{ showBasketItems ? <div  onClick={() => dispatch(toggleShowBasketItems())} className="bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-30"></div> : null }*/}

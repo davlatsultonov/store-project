@@ -1,11 +1,8 @@
 import {useSelector} from "react-redux";
+import {calculateTotalCount} from "../../helpers/helpers.js";
 
 export const BasketIcon = () => {
     const { products: basketProducts } = useSelector(state => state.basketReducer);
-
-    const productsInBasketCount = Object.values(basketProducts).map(itemArray => {
-        return itemArray.reduce((total) => total + 1, 0);
-    }).reduce((acc, curr) => acc + curr, 0)
 
     return (
         <div className='shadow bg-white cursor-pointer inline-flex items-center justify-between rounded pl-2 pr-1 py-2 border border-blue-200 sticky'>
@@ -20,7 +17,7 @@ export const BasketIcon = () => {
             </svg>
             <span
                 className="ml-2 font-bold bg-blue-100 text-blue-800 text-xs mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
-                { productsInBasketCount }
+                { calculateTotalCount(basketProducts) }
             </span>
         </div>
     );

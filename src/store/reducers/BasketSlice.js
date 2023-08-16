@@ -29,11 +29,17 @@ export const basketSlice = createSlice({
             if (state.products[payload].length <= 1) delete state.products[payload]
             else state.products[payload].pop()
         },
+        removeAll: (state) => {
+            state.products = {}
+        },
+        removeAllProductItems: (state, { payload }) => {
+            delete state.products[payload]
+        },
         toggleShowBasketItems: (state) => {
             state.showBasketItems = !state.showBasketItems
         }
     },
 })
 
-export const { add, remove, toggleShowBasketItems } = basketSlice.actions;
+export const { add, remove, removeAll, removeAllProductItems, toggleShowBasketItems } = basketSlice.actions;
 export default basketSlice.reducer;

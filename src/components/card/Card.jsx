@@ -6,12 +6,12 @@ import {add, remove} from "../../store/reducers/BasketSlice.js";
 import {AddIcon} from "../icons/AddIcon.jsx";
 import {RemoveIcon} from "../icons/RemoveIcon.jsx";
 
-export const Card = ({ product }) => {
+export const Card = ({ product, horizontal = false }) => {
     const dispatch = useDispatch();
     const { id, title, price, discountPercentage, rating, thumbnail } = product;
     const { products: basketProducts } = useSelector(state => state.basketReducer);
 
-    const handleProductIncrease = () => {
+    const handleProductIncrease = (product) => {
         dispatch(add(product))
     }
 
@@ -24,12 +24,13 @@ export const Card = ({ product }) => {
     }
 
     const discountEl = () => discountPercentage ? <span
-        className="left-0 -top-8 shadow bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-800 absolute">-{ Math.floor(discountPercentage) }%</span> : null;
+
+        className={`${ horizontal ? '-left-11 -top-4' : 'left-0 -top-8' } shadow bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-800 absolute`}>-{ Math.floor(discountPercentage) }%</span> : null;
 
     return (<div
-        className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flex flex-col justify-between">
+        className={`w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flex ${horizontal ? 'flex-row overflow-hidden' : 'flex-col'} justify-between`}>
         <Link to={productionPrefix + `/product/${id}`} className='border-b'>
-            <img className="rounded-t-lg h-52 object-cover mx-auto" src={thumbnail} alt={title}/>
+            <img className={`${horizontal ? '' : 'rounded-t-lg'} h-52 object-cover mx-auto`} src={thumbnail} alt={title}/>
         </Link>
         <div className="px-5 py-5 flex-grow flex flex-col">
             <Link to={productionPrefix + `/product/${id}`} className='mb-auto relative'>
@@ -46,12 +47,12 @@ export const Card = ({ product }) => {
 
                 { !basketProducts.hasOwnProperty(title) ?
                     <button
-                        onClick={handleProductIncrease}
-                        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">В корзину</button> :
+                        onClick={() => handleProductIncrease(product)}
+                        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add to Basket</button> :
                     <div className='flex items-center'>
                         <RemoveIcon onClick={() => handleProductDecrease(title)} />
                         <span className='mx-4 text-lg'>{ basketProducts[title]?.length }</span>
-                        <AddIcon onClick={() => handleProductIncrease(title)} />
+                        <AddIcon onClick={() => handleProductIncreaseByTitle(title)} />
                     </div>
                 }
             </div>
