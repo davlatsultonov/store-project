@@ -10,7 +10,8 @@ const initialState = {
     isLoading: false,
     error: false,
     minProductPrice: 0,
-    maxProductPrice: 0
+    maxProductPrice: 0,
+    sortType: 'Popular'
 }
 
 export const productSlice = createSlice({
@@ -25,6 +26,9 @@ export const productSlice = createSlice({
         },
         setBrand: (state, { payload }) => {
             state.selectedBrand = payload
+        },
+        setSortType: (state, { payload }) => {
+            state.sortType = payload
         },
         setMinProductPrice: (state, { payload }) => {
             state.minProductPrice = payload
@@ -53,5 +57,5 @@ export const productSlice = createSlice({
     }
 })
 
-export const { setBrand, setBrands , setMaxProductPrice, setMinProductPrice} = productSlice.actions;
+export const { setBrand, setBrands, setSortType , setMaxProductPrice, setMinProductPrice} = productSlice.actions;
 export default productSlice.reducer;

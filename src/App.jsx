@@ -14,10 +14,12 @@ import {BasketIcon} from "./components/icons/BasketIcon.jsx";
 import {Drawer} from "./components/Drawer.jsx";
 import {toggleShowBasketItems} from "./store/reducers/BasketSlice.js";
 import {Loader} from "./components/Loader.jsx";
+import {setBrand, setBrands, setSortType} from "./store/reducers/ProductsSlice.js";
+import {SORT_ELEMENTS} from "./components/contants/index.js";
 
 function App() {
   const dispatch = useDispatch()
-  const { filteredProducts, minProductPrice, maxProductPrice, isLoading, error } = useSelector(state => state.productReducer);
+  const { filteredProducts, brands, sortType, minProductPrice, maxProductPrice, isLoading, error } = useSelector(state => state.productReducer);
   const { products: basketProducts } = useSelector(state => state.basketReducer);
 
   useEffect(() => {
@@ -25,9 +27,26 @@ function App() {
   }, [])
 
   const renderCards = () => {
-    return (filteredProducts && filteredProducts.filter(product => {
+    if (!filteredProducts.length) return 'Products not found';
+
+    const result = filteredProducts.filter(product => {
       return parseInt(product.price) >= minProductPrice && parseInt(product.price) <= maxProductPrice
-    }).map(product => <Card key={product.id} product={product}/>)) || 'No data';
+    }).sort((a, b) => {
+      if (sortType === SORT_ELEMENTS.cheap) return a.price - b.price;
+      if (sortType === SORT_ELEMENTS.expensive) return b.price - a.price;
+      return b.rating - a.rating
+    });
+
+    return result.length ? result.map(product => <Card key={product.id} product={product}/>) : 'Products not found';
+  }
+
+  const handleSortChange = (e) => {
+    dispatch(setSortType(e.target.value))
+  }
+
+  const handleBrandChange = (e) => {
+    dispatch(setBrand(e.target.value))
+    dispatch(setBrands())
   }
 
   return <Layout>
@@ -43,6 +62,11 @@ function App() {
           </div> : null }
           <FilterGroup>
             <FilterItem
+              label={'Sort'}
+            >
+              <FilterSelect items={Object.values(SORT_ELEMENTS)} onClick={handleSortChange} />
+            </FilterItem>
+            <FilterItem
               label={'Price'}
             >
               <FilterPrice />
@@ -50,7 +74,7 @@ function App() {
             <FilterItem
               label={'Brand'}
             >
-              <FilterSelect />
+              <FilterSelect defaultValue={'Choose a brand'} items={brands} onClick={handleBrandChange} />
             </FilterItem>
           </FilterGroup>
         </BlockWrapper>

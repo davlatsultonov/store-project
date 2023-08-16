@@ -28,12 +28,13 @@ export const Drawer = () => {
             return (<div
                 key={title}
                 className='p-3 bg-gray-100 mb-2 rounded-md flex justify-between'>
-                <span className='font-medium'>{ title }
+                <div className='flex items-center w-3/5'>
+                    <span className='font-medium truncate whitespace-nowrap' title={title}>{ title }</span>
                     <span
                         className="ml-3 bg-indigo-100 text-indigo-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-indigo-900 dark:text-indigo-300">
                         { items.length }
                     </span>
-                </span>
+                </div>
                 <span className='font-bold inline-flex'>
                     <RemoveIcon onClick={() => handleProductDecrease(title)} />
                     <span className='mx-2'>$ { items.reduce((acc, current) => acc + current.price, 0) }</span>
