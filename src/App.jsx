@@ -16,6 +16,7 @@ import {toggleShowBasketItems} from "./store/reducers/BasketSlice.js";
 import {Loader} from "./components/Loader.jsx";
 import {setBrand, setBrands, setSortType} from "./store/reducers/ProductsSlice.js";
 import {SORT_ELEMENTS} from "./components/contants/index.js";
+import {calculateWithDiscount} from "./helpers/helpers.js";
 
 function App() {
   const dispatch = useDispatch()
@@ -31,13 +32,13 @@ function App() {
       return parseInt(product.price) >= minProductPrice && parseInt(product.price) <= maxProductPrice
     }).sort((a, b) => {
       if (sortType === SORT_ELEMENTS.cheap) {
-        const el1 = a.price - ((a.price * a.discountPercentage) / 100);
-        const el2 = b.price - ((b.price * b.discountPercentage) / 100);
+        const el1 = calculateWithDiscount(a.price, a.discountPercentage);
+        const el2 = calculateWithDiscount(b.price, b.discountPercentage);
         return el1 - el2
       };
       if (sortType === SORT_ELEMENTS.expensive) {
-        const el1 = a.price - ((a.price * a.discountPercentage) / 100);
-        const el2 = b.price - ((b.price * b.discountPercentage) / 100);
+        const el1 = calculateWithDiscount(a.price, a.discountPercentage);
+        const el2 = calculateWithDiscount(b.price, b.discountPercentage);
         return el2 - el1
       };
       return b.rating - a.rating
@@ -89,7 +90,7 @@ function App() {
         <CardGroup>
           { renderCards() }
         </CardGroup>
-        { !filteredProducts.length && 'Products not found' }
+        { !isLoading && !filteredProducts.length && 'Products not found' }
         { error && <h1>Error while fetching data</h1> }
         { isLoading && <Loader /> }
       </BlockWrapper>

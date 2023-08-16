@@ -1,15 +1,14 @@
 import {Layout} from "../components/layout/Layout.jsx";
 import {Heading1} from "../components/headings/Heading1.jsx";
 import {useDispatch, useSelector} from "react-redux";
-import {CardGroup} from "../components/card/CardGroup.jsx";
 import {Card} from "../components/card/Card.jsx";
 import {BlockWrapper} from "../components/layout/BlockWrapper.jsx";
 import {TrashIcon} from "../components/icons/TrashIcon.jsx";
 import {removeAll, removeAllProductItems, toggleShowBasketItems} from "../store/reducers/BasketSlice.js";
-import {productionPrefix} from "../main.jsx";
-import {Link} from "react-router-dom";
 import {calculateTotalCount, calculateTotalSum} from "../helpers/helpers.js";
 import {useState} from "react";
+import {BasketCheckOut} from "../components/basket/BasketCheckOut.jsx";
+import {BasketEmptyState} from "../components/basket/BasketEmptyState.jsx";
 
 export const Basket = () => {
     const dispatch = useDispatch()
@@ -67,24 +66,8 @@ export const Basket = () => {
                             <button onClick={handleCheckOut} type="button" className="w-full text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
                                 Checkout
                             </button>
-                        </BlockWrapper></> : <div className='flex flex-col justify-center'>
-                        <p className='pb-5 text-lg'>Your basket is empty</p>
-                        <Link
-                            to={productionPrefix + '/'}
-                            className="bg-white hover:text-primary inline-block rounded-lg border border-white px-8 py-3 text-center text-base font-semibold text-black transition hover:bg-blue"
-                        >
-                            Home page
-                        </Link>
-                    </div> }
-                </> : <div className='flex flex-col gap-5'>
-                    <Heading1 title={'Thanks For The Purchase 😊!'} />
-                    <Link
-                    to={productionPrefix + '/'}
-                    className="bg-white hover:text-primary inline-block rounded-lg border border-white px-8 py-3 text-center text-base font-semibold text-black transition hover:bg-blue"
-                >
-                    Go back to shopping
-                </Link>
-                </div> }
+                        </BlockWrapper></> : <BasketEmptyState /> }
+                </> : <BasketCheckOut/> }
             </div>
 
 

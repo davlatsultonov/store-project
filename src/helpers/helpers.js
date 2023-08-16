@@ -13,6 +13,10 @@ export const calculateTotalCount = (items) => {
     }).reduce((acc, curr) => acc + curr, 0)
 }
 
+export const calculateWithDiscount = (price, discount) => {
+    return price - ((price * discount) / 100)
+}
+
 export const findMinPrice = (items) => {
     const item = items.reduce((minItem, currentItem) => {
         if (currentItem.price <= minItem.price) {
