@@ -32,8 +32,16 @@ function App() {
     const result = filteredProducts.filter(product => {
       return parseInt(product.price) >= minProductPrice && parseInt(product.price) <= maxProductPrice
     }).sort((a, b) => {
-      if (sortType === SORT_ELEMENTS.cheap) return a.price - b.price;
-      if (sortType === SORT_ELEMENTS.expensive) return b.price - a.price;
+      if (sortType === SORT_ELEMENTS.cheap) {
+        const el1 = a.price - ((a.price * a.discountPercentage) / 100);
+        const el2 = b.price - ((b.price * b.discountPercentage) / 100);
+        return el1 - el2
+      };
+      if (sortType === SORT_ELEMENTS.expensive) {
+        const el1 = a.price - ((a.price * a.discountPercentage) / 100);
+        const el2 = b.price - ((b.price * b.discountPercentage) / 100);
+        return el2 - el1
+      };
       return b.rating - a.rating
     });
 
