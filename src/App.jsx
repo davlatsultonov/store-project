@@ -27,8 +27,6 @@ function App() {
   }, [])
 
   const renderCards = () => {
-    if (!filteredProducts.length) return 'Products not found';
-
     const result = filteredProducts.filter(product => {
       return parseInt(product.price) >= minProductPrice && parseInt(product.price) <= maxProductPrice
     }).sort((a, b) => {
@@ -45,7 +43,7 @@ function App() {
       return b.rating - a.rating
     });
 
-    return result.length ? result.map(product => <Card key={product.id} product={product}/>) : 'Products not found';
+    return result.map(product => <Card key={product.id} product={product}/>);
   }
 
   const handleSortChange = (e) => {
@@ -91,7 +89,8 @@ function App() {
         <CardGroup>
           { renderCards() }
         </CardGroup>
-        { error && <h1>{ error }</h1> }
+        { !filteredProducts.length && 'Products not found' }
+        { error && <h1>Error while fetching data</h1> }
         { isLoading && <Loader /> }
       </BlockWrapper>
     </div>
