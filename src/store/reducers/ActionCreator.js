@@ -14,7 +14,7 @@ const createAsyncThunkWrapper = (type, callback) => {
 
 export const fetchProducts = createAsyncThunkWrapper('product/fetchAll', async (category) => {
     const baseUrl = 'https://dummyjson.com/products';
-    const finalUrl = !category || category === 'all' ? `${baseUrl}?limit=100` : `${baseUrl}/category/${category}?limit=100`;
+    const finalUrl = !category || category === 'all' ? `${baseUrl}?limit=0` : `${baseUrl}/category/${category}?limit=0`;
     const response = await axios.get(finalUrl)
     return response.data.products
 })

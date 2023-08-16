@@ -13,14 +13,16 @@ import {FilterSelect} from "./components/filters/FilterSelect.jsx";
 
 function App() {
   const dispatch = useDispatch()
-  const { filteredProducts, isLoading, error } = useSelector(state => state.productReducer);
+  const { filteredProducts, minProductPrice, maxProductPrice, isLoading, error } = useSelector(state => state.productReducer);
 
   useEffect(() => {
     if (!filteredProducts.length) dispatch(fetchProducts())
   }, [])
 
   const renderCards = () => {
-    return (filteredProducts && filteredProducts.map(product => <Card key={product.id} product={product}/>)) || 'No data';
+    return (filteredProducts && filteredProducts.filter(product => {
+      return parseInt(product.price) >= minProductPrice && parseInt(product.price) <= maxProductPrice
+    }).map(product => <Card key={product.id} product={product}/>)) || 'No data';
   }
 
   return <Layout>

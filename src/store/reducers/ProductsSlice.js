@@ -1,5 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {fetchProducts} from "./ActionCreator.js";
+import {findMaxPrice, findMinPrice} from "../../helpers/helpers.js";
 
 const initialState = {
     products: [],
@@ -8,6 +9,8 @@ const initialState = {
     selectedBrand: '',
     isLoading: false,
     error: false,
+    minProductPrice: 0,
+    maxProductPrice: 0
 }
 
 export const productSlice = createSlice({
@@ -23,6 +26,12 @@ export const productSlice = createSlice({
         setBrand: (state, { payload }) => {
             state.selectedBrand = payload
         },
+        setMinProductPrice: (state, { payload }) => {
+            state.minProductPrice = payload
+        },
+        setMaxProductPrice: (state, { payload }) => {
+            state.maxProductPrice = payload
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(fetchProducts.fulfilled.type, (state, { payload }) => {
@@ -31,11 +40,10 @@ export const productSlice = createSlice({
             state.selectedBrand = '';
             state.isLoading = false;
             state.error = false;
-            state.products = payload
-            state.filteredProducts = payload.filter(product => {
-                if (state.selectedBrand === '') return product
-                return product.brand === state.selectedBrand
-            })
+            state.products = payload;
+            state.filteredProducts = payload;
+            state.minProductPrice = findMinPrice(payload);
+            state.maxProductPrice = findMaxPrice(payload);
         }).addCase(fetchProducts.pending.type, (state, action) => {
             state.isLoading = true;
         }).addCase(fetchProducts.rejected.type, (state, action) => {
@@ -45,5 +53,5 @@ export const productSlice = createSlice({
     }
 })
 
-export const { setBrand, setBrands } = productSlice.actions;
+export const { setBrand, setBrands , setMaxProductPrice, setMinProductPrice} = productSlice.actions;
 export default productSlice.reducer;
