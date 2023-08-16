@@ -22,12 +22,13 @@ export const productSlice = createSlice({
         },
         setBrand: (state, { payload }) => {
             state.selectedBrand = payload
-        }
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(fetchProducts.fulfilled.type, (state, { payload }) => {
             const filteredBrands = new Set(payload.map(product => product.brand))
             state.brands = Array.from(filteredBrands)
+            state.selectedBrand = '';
             state.isLoading = false;
             state.error = false;
             state.products = payload
