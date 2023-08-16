@@ -1,15 +1,26 @@
 import {Rating} from "../rating/Rating.jsx";
 import {Link} from "react-router-dom";
 import {productionPrefix} from "../../main.jsx";
-import {useDispatch} from "react-redux";
-import {add} from "../../store/reducers/BasketSlice.js";
+import {useDispatch, useSelector} from "react-redux";
+import {add, remove} from "../../store/reducers/BasketSlice.js";
+import {AddIcon} from "../icons/AddIcon.jsx";
+import {RemoveIcon} from "../icons/RemoveIcon.jsx";
 
 export const Card = ({ product }) => {
     const dispatch = useDispatch();
     const { id, title, price, discountPercentage, rating, thumbnail } = product;
+    const { products: basketProducts } = useSelector(state => state.basketReducer);
 
-    const handleAddToBasket = () => {
+    const handleProductIncrease = () => {
         dispatch(add(product))
+    }
+
+    const handleProductDecrease = (title) => {
+        dispatch(remove(title))
+    }
+
+    const handleProductIncreaseByTitle = (title) => {
+        dispatch(add(title))
     }
 
     const discountEl = () => discountPercentage ? <span
@@ -32,9 +43,17 @@ export const Card = ({ product }) => {
             </div>
             <div className="flex items-center justify-between">
                 <span className="text-3xl font-bold text-gray-900 dark:text-white">${ price }</span>
-                <button
-                    onClick={handleAddToBasket}
-                   className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">В корзину</button>
+
+                { !basketProducts.hasOwnProperty(title) ?
+                    <button
+                        onClick={handleProductIncrease}
+                        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">В корзину</button> :
+                    <div className='flex items-center'>
+                        <RemoveIcon onClick={() => handleProductDecrease(title)} />
+                        <span className='mx-4 text-lg'>{ basketProducts[title]?.length }</span>
+                        <AddIcon onClick={() => handleProductIncrease(title)} />
+                    </div>
+                }
             </div>
         </div>
     </div>)
