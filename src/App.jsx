@@ -31,7 +31,7 @@ function App() {
     </BlockWrapper>
     <div className='flex gap-2'>
       <div className='w-1/4'>
-        <BlockWrapper>
+        <BlockWrapper className='sticky top-3'>
           <FilterGroup>
             <FilterItem
               label={'Price'}

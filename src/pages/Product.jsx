@@ -7,6 +7,13 @@ import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
 import {fetchProduct} from "../store/reducers/ActionCreator.js";
 import {setProduct} from "../store/reducers/ProductSlice.js";
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
+
+import { Pagination, Navigation } from 'swiper/modules';
 
 export const Product = () => {
   const dispatch = useDispatch()
@@ -15,6 +22,7 @@ export const Product = () => {
   const navigate = useNavigate();
   const { id: productId } = useParams();
   const navigateBack = () =>  navigate(-1);
+  const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
   useEffect(() => {
     if (!products.length) dispatch(fetchProduct(productId))
@@ -24,13 +32,27 @@ export const Product = () => {
   return <Layout>
     <div className='block'>
       <GoBackBtn navigateBack={navigateBack}/>
-      <div className='flex w-6/12 mx-auto gap-3'>
-        <BlockWrapper className='w-1/2'>
-          <img alt={product?.title} className="h-96 object-contain" src={product?.thumbnail}/>
+      <div className='w-5/12 mx-auto'>
+        <BlockWrapper className='mb-4'>
+          <Swiper
+              slidesPerView={1}
+              spaceBetween={30}
+              loop={true}
+              pagination={{
+                clickable: true,
+              }}
+              navigation={true}
+              modules={[Pagination, Navigation]}
+              className="mySwiper"
+          >
+            { product?.images.map(src => <SwiperSlide key={src}>
+              <img src={src} className='object-cover h-[350px] mx-auto' alt='image'/>
+            </SwiperSlide>) }
+          </Swiper>
         </BlockWrapper>
-        <BlockWrapper className='flex-1'>
-          <Heading1 title={product?.title} light={true} />
-          <div className='my-8'>
+        <BlockWrapper>
+          <div className='flex justify-between'>
+            <Heading1 title={`${product?.title}`} light={true} />
             <Heading1 title={`$${product?.price}`} />
           </div>
           <p className="mb-3 text-gray-500 dark:text-gray-400">{ product?.description }</p>

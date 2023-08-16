@@ -3,6 +3,11 @@ import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
 import {fetchCategories} from "../../store/reducers/ActionCreator.js";
 import {CategoryItem} from "./CategoryItem.jsx";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/free-mode';
+import 'swiper/css/pagination';
+import { FreeMode } from 'swiper/modules';
 
 export const CategoryGroup = () => {
     const dispatch = useDispatch();
@@ -17,8 +22,16 @@ export const CategoryGroup = () => {
         <div className='flex flex-wrap gap-2'>
             { isLoading && <h1>Loading...</h1> }
             { error && <h1>{ error }</h1> }
-            { categories && (isLoading === false) &&  <CategoryItem name={'all'}/>}
-            { categories.map(category => <CategoryItem key={category} name={category}/>) }
+            <Swiper
+                slidesPerView={10}
+                spaceBetween={5}
+                freeMode={true}
+                modules={[FreeMode]}
+                className="mySwiper"
+            >
+                { categories && (isLoading === false) &&  <SwiperSlide className={'!w-fit'}><CategoryItem name={'all'}/></SwiperSlide>}
+                { categories.map(category => <SwiperSlide key={category}  className={'!w-fit'}><CategoryItem name={category}/></SwiperSlide>) }
+            </Swiper>
         </div>
     </>
 }
