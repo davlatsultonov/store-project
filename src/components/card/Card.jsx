@@ -30,7 +30,7 @@ export const Card = ({ product, horizontal = false }) => {
     return (<div
         className={`w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flex ${horizontal ? 'flex-row overflow-hidden' : 'flex-col'} justify-between`}>
         <Link to={productionPrefix + `/product/${id}`} className='border-b'>
-            <img className={`${horizontal ? '' : 'rounded-t-lg'} h-52 object-cover mx-auto`} src={thumbnail} alt={title}/>
+            <img className={`${horizontal ? 'w-[208px]' : 'rounded-t-lg'} h-52 object-cover mx-auto`} src={thumbnail} alt={title}/>
         </Link>
         <div className="px-5 py-5 flex-grow flex flex-col">
             <Link to={productionPrefix + `/product/${id}`} className='mb-auto relative'>
