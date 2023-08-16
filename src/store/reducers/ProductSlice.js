@@ -5,6 +5,7 @@ const initialState = {
     product: null,
     isLoading: false,
     error: false,
+    isSuccess: false
 }
 
 export const productSlice = createSlice({
@@ -18,12 +19,14 @@ export const productSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(fetchProduct.fulfilled.type, (state, action) => {
             state.isLoading = false;
+            state.isSuccess = true;
             state.error = false;
             state.product = action.payload
         }).addCase(fetchProduct.pending.type, (state, action) => {
             state.isLoading = true;
         }).addCase(fetchProduct.rejected.type, (state, action) => {
             state.isLoading = false;
+            state.isSuccess = false;
             state.error = action.payload;
         })
     }

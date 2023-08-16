@@ -14,15 +14,15 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
 import { Pagination, Navigation } from 'swiper/modules';
+import {Loader} from "../components/Loader.jsx";
 
 export const Product = () => {
   const dispatch = useDispatch()
   const { products } = useSelector(state => state.productReducer);
-  const { product, isLoading, error } = useSelector(state => state.singleProductReducer);
+  const { product, isSuccess, isLoading, error } = useSelector(state => state.singleProductReducer);
   const navigate = useNavigate();
   const { id: productId } = useParams();
   const navigateBack = () =>  navigate(-1);
-  const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
   useEffect(() => {
     if (!products.length) dispatch(fetchProduct(productId))
@@ -33,30 +33,33 @@ export const Product = () => {
     <div className='block'>
       <GoBackBtn navigateBack={navigateBack}/>
       <div className='w-5/12 mx-auto'>
-        <BlockWrapper className='mb-4'>
-          <Swiper
-              slidesPerView={1}
-              spaceBetween={30}
-              loop={true}
-              pagination={{
-                clickable: true,
-              }}
-              navigation={true}
-              modules={[Pagination, Navigation]}
-              className="mySwiper"
-          >
-            { product?.images.map(src => <SwiperSlide key={src}>
-              <img src={src} className='object-cover h-[350px] mx-auto' alt='image'/>
-            </SwiperSlide>) }
-          </Swiper>
-        </BlockWrapper>
-        <BlockWrapper>
-          <div className='flex justify-between'>
-            <Heading1 title={`${product?.title}`} light={true} />
-            <Heading1 title={`$${product?.price}`} />
-          </div>
-          <p className="mb-3 text-gray-500 dark:text-gray-400">{ product?.description }</p>
-        </BlockWrapper>
+        { isLoading && <Loader />}
+        { error && <h1>{ error }</h1> }
+        { isSuccess || product ? <>
+          <BlockWrapper className='mb-4'>
+            <Swiper
+                slidesPerView={1}
+                spaceBetween={30}
+                loop={true}
+                pagination={{
+                  clickable: true,
+                }}
+                navigation={true}
+                modules={[Pagination, Navigation]}
+                className="mySwiper"
+            >
+              { product?.images.map(src => <SwiperSlide key={src}>
+                <img src={src} className='object-cover h-[350px] mx-auto' alt='image'/>
+              </SwiperSlide>) }
+            </Swiper>
+          </BlockWrapper>
+          <BlockWrapper>
+            <div className='flex justify-between'>
+              <Heading1 title={`${product?.title}`} light={true} />
+              <Heading1 title={`$${product?.price}`} />
+            </div>
+            <p className="mb-3 text-gray-500 dark:text-gray-400">{ product?.description }</p>
+          </BlockWrapper></> : null }
       </div>
     </div>
   </Layout>;

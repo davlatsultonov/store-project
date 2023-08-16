@@ -8,7 +8,7 @@ export const BasketIcon = () => {
     }).reduce((acc, curr) => acc + curr, 0)
 
     return (
-        <div className='bg-white cursor-pointer inline-flex items-center justify-between rounded pl-2 pr-1 py-2 border border-blue-200 sticky'>
+        <div className='shadow bg-white cursor-pointer inline-flex items-center justify-between rounded pl-2 pr-1 py-2 border border-blue-200 sticky'>
             <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-shopping-cart" width="30"
                  height="30" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round"
                  strokeLinejoin="round">

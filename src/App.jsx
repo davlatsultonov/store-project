@@ -13,6 +13,7 @@ import {FilterSelect} from "./components/filters/FilterSelect.jsx";
 import {BasketIcon} from "./components/icons/BasketIcon.jsx";
 import {Drawer} from "./components/Drawer.jsx";
 import {toggleShowBasketItems} from "./store/reducers/BasketSlice.js";
+import {Loader} from "./components/Loader.jsx";
 
 function App() {
   const dispatch = useDispatch()
@@ -35,9 +36,9 @@ function App() {
       <CategoryGroup />
     </BlockWrapper>
     <div className='flex gap-2'>
-      <div className='w-1/4'>
+      <div className='w-1/5'>
         <BlockWrapper className='sticky top-3'>
-          { Object.keys(basketProducts).length ? <div className='text-center mb-4 border-b pb-4'  onClick={() => dispatch(toggleShowBasketItems())}>
+          { Object.keys(basketProducts).length ? <div className='mb-4 border-b pb-4'  onClick={() => dispatch(toggleShowBasketItems())}>
             <BasketIcon />
           </div> : null }
           <FilterGroup>
@@ -54,12 +55,12 @@ function App() {
           </FilterGroup>
         </BlockWrapper>
       </div>
-      <BlockWrapper>
-        { isLoading && <h1>Loading...</h1> }
-        { error && <h1>{ error }</h1> }
-        <CardGroup className='flex-1'>
+      <BlockWrapper className='flex-1'>
+        <CardGroup>
           { renderCards() }
         </CardGroup>
+        { error && <h1>{ error }</h1> }
+        { isLoading && <Loader /> }
       </BlockWrapper>
     </div>
   </Layout>;

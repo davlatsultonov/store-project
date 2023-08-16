@@ -8,6 +8,7 @@ import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/pagination';
 import { FreeMode } from 'swiper/modules';
+import {Loader} from "../Loader.jsx";
 
 export const CategoryGroup = () => {
     const dispatch = useDispatch();
@@ -20,7 +21,7 @@ export const CategoryGroup = () => {
     return <>
         <Heading5 title='Categories' />
         <div className='flex flex-wrap gap-2'>
-            { isLoading && <h1>Loading...</h1> }
+            { isLoading && <Loader />}
             { error && <h1>{ error }</h1> }
             <Swiper
                 slidesPerView={10}
