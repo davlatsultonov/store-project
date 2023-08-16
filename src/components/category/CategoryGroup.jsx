@@ -17,7 +17,7 @@ export const CategoryGroup = () => {
         <div className='flex flex-wrap gap-2'>
             { isLoading && <h1>Loading...</h1> }
             { error && <h1>{ error }</h1> }
-            { categories &&  <CategoryItem name={'all'}/>}
+            { categories && (isLoading === false) &&  <CategoryItem name={'all'}/>}
             { categories.map(category => <CategoryItem key={category} name={category}/>) }
         </div>
     </>

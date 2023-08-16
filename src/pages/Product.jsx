@@ -14,9 +14,7 @@ export const Product = () => {
   const { product, isLoading, error } = useSelector(state => state.singleProductReducer);
   const navigate = useNavigate();
   const { id: productId } = useParams();
-  const navigateBack = () => {
-    navigate(-1);
-  }
+  const navigateBack = () =>  navigate(-1);
 
   useEffect(() => {
     if (!products.length) dispatch(fetchProduct(productId))

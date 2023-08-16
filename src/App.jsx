@@ -9,17 +9,18 @@ import {FilterPrice} from "./components/filters/FilterPrice.jsx";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
 import {fetchProducts} from "./store/reducers/ActionCreator.js";
+import {FilterSelect} from "./components/filters/FilterSelect.jsx";
 
 function App() {
   const dispatch = useDispatch()
-  const { products, isLoading, error } = useSelector(state => state.productReducer);
+  const { filteredProducts, isLoading, error } = useSelector(state => state.productReducer);
 
   useEffect(() => {
-    if (!products.length) dispatch(fetchProducts())
+    if (!filteredProducts.length) dispatch(fetchProducts())
   }, [])
 
   const renderCards = () => {
-    return (products && products.map(product => <Card key={product.id} product={product}/>)) || 'No data';
+    return (filteredProducts && filteredProducts.map(product => <Card key={product.id} product={product}/>)) || 'No data';
   }
 
   return <Layout>
@@ -35,11 +36,11 @@ function App() {
             >
               <FilterPrice />
             </FilterItem>
-            {/*<FilterItem
+            <FilterItem
               label={'Brand'}
             >
               <FilterSelect />
-            </FilterItem>*/}
+            </FilterItem>
           </FilterGroup>
         </BlockWrapper>
       </div>
