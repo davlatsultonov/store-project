@@ -1,6 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {fetchProducts} from "./ActionCreator.js";
-import {findMaxPrice, findMinPrice} from "../../helpers/helpers.js";
+import {findMaxPrice, findMinPrice, sortProducts} from "../../helpers/helpers.js";
 
 const initialState = {
     products: [],
@@ -43,11 +43,10 @@ export const productSlice = createSlice({
         } }) => {
             const filteredBrands = new Set(products.map(product => product.brand))
             state.brands = Array.from(filteredBrands)
-            state.selectedBrand = '';
             state.isLoading = false;
             state.error = false;
             state.products = products;
-            state.filteredProducts = products;
+            state.filteredProducts = sortProducts(state.selectedBrand ? products.filter(product => product.brand === state.selectedBrand) : products, state.sortType);
             state.minProductPrice = findMinPrice(products);
             state.maxProductPrice = findMaxPrice(products);
         }).addCase(fetchProducts.pending.type, (state, action) => {

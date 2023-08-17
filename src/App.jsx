@@ -16,7 +16,7 @@ import {toggleShowBasketItems} from "./store/reducers/BasketSlice.js";
 import {Loader} from "./components/Loader.jsx";
 import {setBrand, setBrands, setSortType} from "./store/reducers/ProductsSlice.js";
 import {SORT_ELEMENTS} from "./components/contants/index.js";
-import {calculateWithDiscount} from "./helpers/helpers.js";
+import {calculateWithDiscount, sortProducts} from "./helpers/helpers.js";
 import {Paginate} from "./components/Paginate.jsx";
 
 function App() {
@@ -34,21 +34,9 @@ function App() {
   }, [currentPage, postsPerPage])
 
   const renderCards = () => {
-    const result = filteredProducts.filter(product => {
+    const result = sortProducts(filteredProducts.filter(product => {
       return parseInt(product.price) >= minProductPrice && parseInt(product.price) <= maxProductPrice
-    }).sort((a, b) => {
-      if (sortType === SORT_ELEMENTS.cheap) {
-        const el1 = calculateWithDiscount(a.price, a.discountPercentage);
-        const el2 = calculateWithDiscount(b.price, b.discountPercentage);
-        return el1 - el2
-      };
-      if (sortType === SORT_ELEMENTS.expensive) {
-        const el1 = calculateWithDiscount(a.price, a.discountPercentage);
-        const el2 = calculateWithDiscount(b.price, b.discountPercentage);
-        return el2 - el1
-      };
-      return b.rating - a.rating
-    });
+    }), sortType)
 
     return result.map(product => <Card key={product.id} product={product}/>);
   }
