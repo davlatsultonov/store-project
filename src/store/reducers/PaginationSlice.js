@@ -3,7 +3,7 @@ import {fetchProducts} from "./ActionCreator.js";
 
 const initialState = {
     currentPage: 1,
-    postsPerPage: 10,
+    postsPerPage: 15,
     totalPosts: null,
 }
 

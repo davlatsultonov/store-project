@@ -14,41 +14,30 @@ import {BasketIcon} from "./components/icons/BasketIcon.jsx";
 import {Drawer} from "./components/Drawer.jsx";
 import {toggleShowBasketItems} from "./store/reducers/BasketSlice.js";
 import {Loader} from "./components/Loader.jsx";
-import {setBrand, setBrands, setSortType} from "./store/reducers/ProductsSlice.js";
+import {setBrand, setSortType} from "./store/reducers/ProductsSlice.js";
 import {SORT_ELEMENTS} from "./components/contants/index.js";
-import {calculateWithDiscount, sortProducts} from "./helpers/helpers.js";
 import {Paginate} from "./components/Paginate.jsx";
 
 function App() {
   const dispatch = useDispatch()
-  const { filteredProducts, brands, sortType, minProductPrice, maxProductPrice, isLoading, error } = useSelector(state => state.productReducer);
+  const { filteredProducts, selectedBrand, brands, sortType, minProductPrice, maxProductPrice, isLoading, error } = useSelector(state => state.productReducer);
   const { products: basketProducts } = useSelector(state => state.basketReducer);
   const { currentPage, postsPerPage } = useSelector(state => state.paginationReducer);
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
 
   useEffect(() => {
     if (!filteredProducts.length) dispatch(fetchProducts())
   }, [])
 
-  useEffect(() => {
-    dispatch(fetchProducts())
-  }, [currentPage, postsPerPage])
-
-  const renderCards = () => {
-    const result = sortProducts(filteredProducts.filter(product => {
-      return parseInt(product.price) >= minProductPrice && parseInt(product.price) <= maxProductPrice
-    }), sortType)
-
-    return result.map(product => <Card key={product.id} product={product}/>);
-  }
+  const renderCards = () => filteredProducts.slice(indexOfFirstPost, indexOfLastPost).map(product => <Card key={product.id} product={product}/>);
 
   const handleSortChange = (e) => {
     dispatch(setSortType(e.target.value))
-    dispatch(fetchProducts())
   }
 
   const handleBrandChange = (e) => {
     dispatch(setBrand(e.target.value))
-    dispatch(setBrands())
   }
 
   return <Layout>

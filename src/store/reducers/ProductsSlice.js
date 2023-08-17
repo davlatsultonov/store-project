@@ -1,6 +1,7 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {fetchProducts} from "./ActionCreator.js";
-import {findMaxPrice, findMinPrice, sortProducts} from "../../helpers/helpers.js";
+import {calculateWithDiscount, findMaxPrice, findMinPrice} from "../../helpers/helpers.js";
+import {SORT_ELEMENTS} from "../../components/contants/index.js";
 
 const initialState = {
     products: [],
@@ -14,39 +15,63 @@ const initialState = {
     sortType: 'Popular'
 }
 
+const handleProductsFilter = (state) => {
+    return state.products.filter(product => {
+        const price = parseInt(product.price)
+        if (state.selectedBrand === '') return price >= state.minProductPrice && price <= state.maxProductPrice
+        else return price >= state.minProductPrice && price <= state.maxProductPrice && product.brand === state.selectedBrand
+    }).sort((a, b) => {
+        if (state.sortType === SORT_ELEMENTS.cheap) {
+            const el1 = calculateWithDiscount(a.price, a.discountPercentage);
+            const el2 = calculateWithDiscount(b.price, b.discountPercentage);
+            return el1 - el2
+        }
+        if (state.sortType === SORT_ELEMENTS.expensive) {
+            const el1 = calculateWithDiscount(a.price, a.discountPercentage);
+            const el2 = calculateWithDiscount(b.price, b.discountPercentage);
+            return el2 - el1
+        }
+        return b.rating - a.rating
+    });
+}
+
 export const productSlice = createSlice({
     name: 'product',
     initialState,
     reducers: {
         setBrands: (state) => {
-            state.filteredProducts = state.products.filter(product => {
-                if (state.selectedBrand === '') return product
-                return product.brand === state.selectedBrand
-            })
+            const filteredBrands = new Set(state.products.map(product => product.brand))
+            state.brands = Array.from(filteredBrands)
         },
-        setBrand: (state, { payload }) => {
+        setBrand: (state, {payload}) => {
             state.selectedBrand = payload
+            state.filteredProducts = handleProductsFilter(state)
         },
-        setSortType: (state, { payload }) => {
+        setSortType: (state, {payload}) => {
             state.sortType = payload
+            state.filteredProducts = handleProductsFilter(state)
         },
-        setMinProductPrice: (state, { payload }) => {
+        setMinProductPrice: (state, {payload}) => {
             state.minProductPrice = payload
+            state.filteredProducts = handleProductsFilter(state)
         },
-        setMaxProductPrice: (state, { payload }) => {
+        setMaxProductPrice: (state, {payload}) => {
             state.maxProductPrice = payload
+            state.filteredProducts = handleProductsFilter(state)
         }
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchProducts.fulfilled.type, (state, { payload: {
-            products
-        } }) => {
+        builder.addCase(fetchProducts.fulfilled.type, (state, {
+            payload: {
+                products
+            }
+        }) => {
             const filteredBrands = new Set(products.map(product => product.brand))
             state.brands = Array.from(filteredBrands)
             state.isLoading = false;
             state.error = false;
             state.products = products;
-            state.filteredProducts = sortProducts(state.selectedBrand ? products.filter(product => product.brand === state.selectedBrand) : products, state.sortType);
+            state.filteredProducts = handleProductsFilter(state);
             state.minProductPrice = findMinPrice(products);
             state.maxProductPrice = findMaxPrice(products);
         }).addCase(fetchProducts.pending.type, (state, action) => {
@@ -58,5 +83,5 @@ export const productSlice = createSlice({
     }
 })
 
-export const { setBrand, setBrands, setSortType , setMaxProductPrice, setMinProductPrice} = productSlice.actions;
+export const {setBrand, setBrands, setSortType, setMaxProductPrice, setMinProductPrice} = productSlice.actions;
 export default productSlice.reducer;

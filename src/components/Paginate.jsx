@@ -4,26 +4,23 @@ import {setCurrentPage} from "../store/reducers/PaginationSlice.js";
 export const Paginate = () => {
     const dispatch = useDispatch()
     const { currentPage, postsPerPage, totalPosts } = useSelector(state => state.paginationReducer);
+    const { filteredProducts } = useSelector(state => state.productReducer);
     const isFirstPage = currentPage === 1;
     const isLastPage = currentPage === Math.ceil(totalPosts / postsPerPage);
 
+    if (!filteredProducts || filteredProducts.length <= 10) return null
+
     const previousPage = () => {
-        if (!isFirstPage) {
-            dispatch(setCurrentPage(currentPage - 1));
-        }
+        if (!isFirstPage) dispatch(setCurrentPage(currentPage - 1));
     };
 
     const nextPage = () => {
-        if (!isLastPage) {
-            dispatch(setCurrentPage(currentPage + 1));
-        }
+        if (!isLastPage) dispatch(setCurrentPage(currentPage + 1));
     };
 
     const paginate = (n) => dispatch(setCurrentPage(n));
 
     const pageNumbers = [];
-
-    if (!totalPosts || totalPosts <= 10) return null
 
     for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
         pageNumbers.push(i);

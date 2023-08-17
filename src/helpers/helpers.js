@@ -40,19 +40,3 @@ export const findMaxPrice = (items) => {
 
     return item.price
 }
-
-export const sortProducts = (products, sortType) => {
-    return products.sort((a, b) => {
-        if (sortType === SORT_ELEMENTS.cheap) {
-            const el1 = calculateWithDiscount(a.price, a.discountPercentage);
-            const el2 = calculateWithDiscount(b.price, b.discountPercentage);
-            return el1 - el2
-        }
-        if (sortType === SORT_ELEMENTS.expensive) {
-            const el1 = calculateWithDiscount(a.price, a.discountPercentage);
-            const el2 = calculateWithDiscount(b.price, b.discountPercentage);
-            return el2 - el1
-        }
-        return b.rating - a.rating
-    });
-}
