@@ -9,6 +9,7 @@ import {calculateTotalCount, calculateTotalSum} from "../helpers/helpers.js";
 import {useState} from "react";
 import {BasketCheckOut} from "../components/basket/BasketCheckOut.jsx";
 import {BasketEmptyState} from "../components/basket/BasketEmptyState.jsx";
+import {setBrand} from "../store/reducers/ProductsSlice.js";
 
 export const Basket = () => {
     const dispatch = useDispatch()
@@ -17,6 +18,8 @@ export const Basket = () => {
 
     const handleCheckOut = () => {
         handleRemoveAll();
+        console.log(12)
+        dispatch(setBrand(''))
         dispatch(toggleShowBasketItems())
         setIsCheckedOut(true)
     }
