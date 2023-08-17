@@ -7,7 +7,7 @@ import {BlockWrapper} from "./components/layout/BlockWrapper.jsx";
 import {FilterItem} from "./components/filters/FilterItem.jsx";
 import {FilterPrice} from "./components/filters/FilterPrice.jsx";
 import {useDispatch, useSelector} from "react-redux";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {fetchProducts} from "./store/reducers/ActionCreator.js";
 import {FilterSelect} from "./components/filters/FilterSelect.jsx";
 import {BasketIcon} from "./components/icons/BasketIcon.jsx";
@@ -17,15 +17,21 @@ import {Loader} from "./components/Loader.jsx";
 import {setBrand, setBrands, setSortType} from "./store/reducers/ProductsSlice.js";
 import {SORT_ELEMENTS} from "./components/contants/index.js";
 import {calculateWithDiscount} from "./helpers/helpers.js";
+import {Paginate} from "./components/Paginate.jsx";
 
 function App() {
   const dispatch = useDispatch()
   const { filteredProducts, brands, sortType, minProductPrice, maxProductPrice, isLoading, error } = useSelector(state => state.productReducer);
   const { products: basketProducts } = useSelector(state => state.basketReducer);
+  const { currentPage, postsPerPage } = useSelector(state => state.paginationReducer);
 
   useEffect(() => {
     if (!filteredProducts.length) dispatch(fetchProducts())
   }, [])
+
+  useEffect(() => {
+    dispatch(fetchProducts())
+  }, [currentPage, postsPerPage])
 
   const renderCards = () => {
     const result = filteredProducts.filter(product => {
@@ -49,11 +55,13 @@ function App() {
 
   const handleSortChange = (e) => {
     dispatch(setSortType(e.target.value))
+    dispatch(fetchProducts())
   }
 
   const handleBrandChange = (e) => {
     dispatch(setBrand(e.target.value))
     dispatch(setBrands())
+    dispatch(fetchProducts())
   }
 
   return <Layout>
@@ -87,9 +95,12 @@ function App() {
         </BlockWrapper>
       </div>
       <BlockWrapper className='flex-1'>
-        <CardGroup>
-          { renderCards() }
-        </CardGroup>
+        { !isLoading && !error && <>
+          <CardGroup>
+            { renderCards() }
+          </CardGroup>
+          <Paginate />
+        </> }
         { !isLoading && !filteredProducts.length && 'Products not found' }
         { error && <h1>Error while fetching data</h1> }
         { isLoading && <Loader /> }

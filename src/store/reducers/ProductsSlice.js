@@ -38,16 +38,18 @@ export const productSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchProducts.fulfilled.type, (state, { payload }) => {
-            const filteredBrands = new Set(payload.map(product => product.brand))
+        builder.addCase(fetchProducts.fulfilled.type, (state, { payload: {
+            products
+        } }) => {
+            const filteredBrands = new Set(products.map(product => product.brand))
             state.brands = Array.from(filteredBrands)
             state.selectedBrand = '';
             state.isLoading = false;
             state.error = false;
-            state.products = payload;
-            state.filteredProducts = payload;
-            state.minProductPrice = findMinPrice(payload);
-            state.maxProductPrice = findMaxPrice(payload);
+            state.products = products;
+            state.filteredProducts = products;
+            state.minProductPrice = findMinPrice(products);
+            state.maxProductPrice = findMaxPrice(products);
         }).addCase(fetchProducts.pending.type, (state, action) => {
             state.isLoading = true;
         }).addCase(fetchProducts.rejected.type, (state, action) => {

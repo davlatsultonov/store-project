@@ -5,18 +5,19 @@ const createAsyncThunkWrapper = (type, callback) => {
     return createAsyncThunk(type,
         async (arg , thunkAPI) => {
             try {
-                return await callback(arg)
+                return await callback(arg, thunkAPI.getState())
             } catch (err) {
                 return thunkAPI.rejectWithValue(err.message)
             }
         })
 }
 
-export const fetchProducts = createAsyncThunkWrapper('product/fetchAll', async (category) => {
+export const fetchProducts = createAsyncThunkWrapper('product/fetchAll', async (category, state) => {
+    const { currentPage, postsPerPage } = state.paginationReducer
     const baseUrl = 'https://dummyjson.com/products';
-    const finalUrl = !category || category === 'all' ? `${baseUrl}?limit=0` : `${baseUrl}/category/${category}?limit=0`;
+    const finalUrl = !category || category === 'all' ? `${baseUrl}?limit=${postsPerPage}&skip=${(currentPage - 1) * postsPerPage}` : `${baseUrl}/category/${category}?limit=${postsPerPage}&skip=${(currentPage - 1) * postsPerPage}`;
     const response = await axios.get(finalUrl)
-    return response.data.products
+    return response.data
 })
 
 export const fetchProduct = createAsyncThunkWrapper('product/fetchProduct', async (id) => {
