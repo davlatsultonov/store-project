@@ -8,6 +8,7 @@ const initialState = {
     filteredProducts: [],
     brands: [],
     selectedBrand: '',
+    currentCategory: '',
     isLoading: false,
     error: false,
     minProductPrice: 0,
@@ -24,9 +25,11 @@ const handleProductsFilter = (state) => {
         return b.rating - a.rating
     }).filter(product => {
         const price = parseInt(product.price)
-        if (state.selectedBrand === '') return price >= state.minProductPrice && price <= state.maxProductPrice
-        else return price >= state.minProductPrice && price <= state.maxProductPrice && product.brand === state.selectedBrand
-    });
+        const greaterThanMin = price >= state.minProductPrice;
+        const lowerThanMax = price <= state.maxProductPrice;
+        if (state.selectedBrand === '') return greaterThanMin && lowerThanMax
+        else return greaterThanMin && lowerThanMax && product.brand === state.selectedBrand;
+    }).filter(product => state.currentCategory === '' ? product : product.category === state.currentCategory)
 }
 
 export const productSlice = createSlice({
@@ -34,7 +37,7 @@ export const productSlice = createSlice({
     initialState,
     reducers: {
         setBrands: (state) => {
-            const filteredBrands = new Set(state.products.map(product => product.brand))
+            const filteredBrands = new Set(state.filteredProducts.map(product => product.brand))
             state.brands = Array.from(filteredBrands)
         },
         setBrand: (state, {payload}) => {
@@ -52,6 +55,12 @@ export const productSlice = createSlice({
         setMaxProductPrice: (state, {payload}) => {
             state.maxProductPrice = payload
             state.filteredProducts = handleProductsFilter(state)
+        },
+        setCurrentCategory: (state, { payload }) => {
+            state.currentCategory = payload
+            state.selectedBrand = '';
+            state.filteredProducts = handleProductsFilter(state)
+            state.brands = Array.from(new Set(state.filteredProducts.map(product => product.brand)))
         }
     },
     extraReducers: (builder) => {
@@ -78,5 +87,5 @@ export const productSlice = createSlice({
     }
 })
 
-export const {setBrand, setBrands, setSortType, setMaxProductPrice, setMinProductPrice} = productSlice.actions;
+export const {setBrand, setCurrentCategory, setBrands, setSortType, setMaxProductPrice, setMinProductPrice} = productSlice.actions;
 export default productSlice.reducer;

@@ -12,12 +12,9 @@ const createAsyncThunkWrapper = (type, callback) => {
         })
 }
 
-export const fetchProducts = createAsyncThunkWrapper('product/fetchAll', async (category, state) => {
-    const { currentPage, postsPerPage } = state.paginationReducer
-    const baseUrl = 'https://dummyjson.com/products';
-    const finalUrl = (!category || category === 'all' ? `${baseUrl}` : `${baseUrl}/category/${category}`) + '?limit=0';
-    const response = await axios.get(finalUrl)
-    return response.data
+export const fetchProducts = createAsyncThunkWrapper('product/fetchAll', async () => {
+    const { data } = await axios.get('https://dummyjson.com/products?limit=0')
+    return data
 })
 
 export const fetchProduct = createAsyncThunkWrapper('product/fetchProduct', async (id) => {

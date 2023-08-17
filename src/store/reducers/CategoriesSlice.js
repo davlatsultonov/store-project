@@ -5,17 +5,11 @@ const initialState = {
     categories: [],
     isLoading: false,
     error: false,
-    currentCategory: ''
 }
 
 export const categorySlice = createSlice({
     name: 'category',
     initialState,
-    reducers: {
-        setCurrentCategory: (state, { payload }) => {
-            state.currentCategory = payload
-        }
-    },
     extraReducers: (builder) => {
         builder.addCase(fetchCategories.fulfilled.type, (state, action) => {
             state.isLoading = false;
@@ -29,7 +23,5 @@ export const categorySlice = createSlice({
         })
     }
 })
-
-export const { setCurrentCategory } = categorySlice.actions
 
 export default categorySlice.reducer;
