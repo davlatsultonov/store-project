@@ -61,7 +61,6 @@ function App() {
   const handleBrandChange = (e) => {
     dispatch(setBrand(e.target.value))
     dispatch(setBrands())
-    dispatch(fetchProducts())
   }
 
   return <Layout>

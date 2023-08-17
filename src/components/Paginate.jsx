@@ -3,7 +3,6 @@ import {setCurrentPage} from "../store/reducers/PaginationSlice.js";
 
 export const Paginate = () => {
     const dispatch = useDispatch()
-    const { filteredProducts } = useSelector(state => state.productReducer);
     const { currentPage, postsPerPage, totalPosts } = useSelector(state => state.paginationReducer);
     const isFirstPage = currentPage === 1;
     const isLastPage = currentPage === Math.ceil(totalPosts / postsPerPage);
