@@ -60,8 +60,9 @@ export const productSlice = createSlice({
                 products
             }
         }) => {
-            const filteredBrands = new Set(products.map(product => product.brand))
-            state.brands = Array.from(filteredBrands)
+            const filteredBrands = new Set(products.map(product => product.brand));
+            state.brands = Array.from(filteredBrands);
+            state.selectedBrand = '';
             state.minProductPrice = findMinPrice(products);
             state.maxProductPrice = findMaxPrice(products);
             state.isLoading = false;
